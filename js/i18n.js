@@ -106,6 +106,8 @@ export const TRANSLATIONS = {
     infoLimitsText: '0.00 ‰ — početnici, motori, profesionalni\n0.50 ‰ — opća granica\n0.50–1.50 ‰ — prekršaj (kazna + bodovi)\n>1.50 ‰ — kazneno djelo',
     infoDisclaimerTitle: '⚠️ Važno upozorenje',
     infoDisclaimerText: 'Rezultati su procjena. Stvarni BAC može se razlikovati ovisno o hrani, lijekovima, individualnom metabolizmu i drugim faktorima. Nikada ne voziš nakon konzumacije alkohola. Ova aplikacija nije zamjena za alkomat.',
+    infoEuTitle: '🌍 Granice vožnje u Europi',
+    infoEuNote: 'Izvor: ETSC 2025. Prikazane su standardne granice. Posebne kategorije (početnici, profesionalni vozači) mogu imati strože granice.',
     infoClose: 'Razumijem',
 
     // Empty states
@@ -228,6 +230,8 @@ export const TRANSLATIONS = {
     infoLimitsText: '0.00 ‰ — beginners, motorcycles, professional\n0.50 ‰ — general limit\n0.50–1.50 ‰ — infraction (fine + points)\n>1.50 ‰ — criminal offense',
     infoDisclaimerTitle: '⚠️ Important warning',
     infoDisclaimerText: 'Results are estimates. Actual BAC may differ depending on food, medications, individual metabolism and other factors. Never drive after consuming alcohol. This app is not a substitute for a breathalyzer.',
+    infoEuTitle: '🌍 Driving Limits in Europe',
+    infoEuNote: 'Source: ETSC 2025. Standard limits shown. Special categories (novice, professional drivers) may have stricter limits.',
     infoClose: 'Got it',
 
     // Empty states

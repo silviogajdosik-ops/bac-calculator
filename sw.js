@@ -3,7 +3,7 @@
  * Cache-first strategija za offline support
  */
 
-const CACHE_VERSION = 'bac-v1.2.2';
+const CACHE_VERSION = 'bac-v1.3.0';
 const CACHE_NAME = `app-${CACHE_VERSION}`;
 
 const ASSETS = [

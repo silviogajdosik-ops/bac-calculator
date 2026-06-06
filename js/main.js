@@ -4,13 +4,59 @@
  * v1.0.0
  */
 
-import { t, getLang, toggleLang } from './i18n.js?v=1.2.2';
-import { getProfiles, getActiveProfile, getProfileById, setActiveProfile, createProfile, updateProfile, deleteProfile, validateProfile } from './profiles.js?v=1.2.2';
-import { getSessionDrinks, addDrinkToSession, removeDrinkFromSession, clearSession, pruneOldDrinks, totalAlcoholGrams, formatDrinkTime } from './session.js?v=1.2.2';
-import { calcBAC, hoursUntilBAC, getDrivingStatus, formatBAC, formatSoberTime } from './bac.js?v=1.2.2';
-import { DRINKS_DB, DRINK_CATEGORIES, getDrinksByCategory, searchDrinks } from './drinks-db.js?v=1.2.2';
+import { t, getLang, toggleLang } from './i18n.js?v=1.3.0';
+import { getProfiles, getActiveProfile, getProfileById, setActiveProfile, createProfile, updateProfile, deleteProfile, validateProfile } from './profiles.js?v=1.3.0';
+import { getSessionDrinks, addDrinkToSession, removeDrinkFromSession, clearSession, pruneOldDrinks, totalAlcoholGrams, formatDrinkTime } from './session.js?v=1.3.0';
+import { calcBAC, hoursUntilBAC, getDrivingStatus, formatBAC, formatSoberTime } from './bac.js?v=1.3.0';
+import { DRINKS_DB, DRINK_CATEGORIES, getDrinksByCategory, searchDrinks } from './drinks-db.js?v=1.3.0';
 
-const APP_VERSION = 'v1.2.2';
+const APP_VERSION = 'v1.3.0';
+
+// EU BAC limits — izvor: ETSC 2025 + public sources
+const EU_BAC_LIMITS = [
+  {
+    bac: '0.0 ‰',
+    color: 'danger',
+    hr: 'Bjelorusija, Češka, Mađarska, Rumunjska, Slovačka',
+    en: 'Belarus, Czech Republic, Hungary, Romania, Slovakia',
+  },
+  {
+    bac: '0.1 ‰',
+    color: 'danger',
+    hr: 'Albanija',
+    en: 'Albania',
+  },
+  {
+    bac: '0.2 ‰',
+    color: 'warn',
+    hr: 'Estonija, Norveška, Poljska, Švedska, Ukrajna',
+    en: 'Estonia, Norway, Poland, Sweden, Ukraine',
+  },
+  {
+    bac: '0.3 ‰',
+    color: 'warn',
+    hr: 'BiH, Crna Gora, Moldavija, Rusija, Srbija',
+    en: 'Bosnia & Herz., Moldova, Montenegro, Russia, Serbia',
+  },
+  {
+    bac: '0.4 ‰',
+    color: 'warn',
+    hr: 'Litva',
+    en: 'Lithuania',
+  },
+  {
+    bac: '0.5 ‰',
+    color: 'ok',
+    hr: 'Austrija, Belgija, Bugarska, Cipar, Danska, Finska, Francuska, Grčka, Hrvatska, Irska, Island, Italija, Kosovo, Latvija, Lihtenštajn, Luksemburg, Malta, Nj. Makedonija, Nizozemska, Njemačka, Portugal, Slovenija, Škotska, Španjolska, Švicarska, Turska',
+    en: 'Austria, Belgium, Bulgaria, Croatia, Cyprus, Denmark, Finland, France, Germany, Greece, Iceland, Ireland, Italy, Kosovo, Latvia, Liechtenstein, Luxembourg, Malta, Netherlands, N. Macedonia, Portugal, Scotland, Slovenia, Spain, Switzerland, Turkey',
+  },
+  {
+    bac: '0.8 ‰',
+    color: 'ok',
+    hr: 'UK (Engl., Wales, Sj. Irska)',
+    en: 'UK (England, Wales, N. Ireland)',
+  },
+];
 
 // ─── State ────────────────────────────────────────────────────
 let currentScreen = 'home';
@@ -652,6 +698,18 @@ function openInfoModal() {
   const limitsEl = $('info-limits-text');
   const lines = t('infoLimitsText').split('\n');
   limitsEl.innerHTML = lines.map(l => `<div>${esc(l)}</div>`).join('');
+
+  // EU limits
+  $('info-eu-title').textContent = t('infoEuTitle');
+  $('info-eu-note').textContent  = t('infoEuNote');
+  const lang = getLang();
+  const euEl = $('info-eu-limits');
+  euEl.innerHTML = EU_BAC_LIMITS.map(row => `
+    <div class="eu-limit-row eu-limit-row--${row.color}">
+      <span class="eu-limit-bac">${row.bac}</span>
+      <span class="eu-limit-countries">${row[lang]}</span>
+    </div>
+  `).join('');
 
   $('info-modal-overlay').classList.add('open');
 }

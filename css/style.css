@@ -958,6 +958,53 @@ body {
 .text-dim    { color: var(--clr-text-dim); }
 .hidden      { display: none !important; }
 
+/* ---------- EU Limits ---------- */
+.info-eu-limits {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: var(--space-sm);
+}
+
+.eu-limit-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--clr-surface-2);
+  border-left: 3px solid var(--clr-text-faint);
+}
+
+.eu-limit-row--danger { border-left-color: var(--clr-danger); }
+.eu-limit-row--warn   { border-left-color: var(--clr-warning); }
+.eu-limit-row--ok     { border-left-color: var(--clr-success); }
+
+.eu-limit-bac {
+  font-weight: 700;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  min-width: 52px;
+  color: var(--clr-text);
+}
+
+.eu-limit-row--danger .eu-limit-bac { color: var(--clr-danger); }
+.eu-limit-row--warn   .eu-limit-bac { color: var(--clr-warning); }
+.eu-limit-row--ok     .eu-limit-bac { color: var(--clr-success); }
+
+.eu-limit-countries {
+  font-size: 0.78rem;
+  color: var(--clr-text-dim);
+  line-height: 1.4;
+}
+
+.info-section__note {
+  font-size: 0.7rem;
+  color: var(--clr-text-faint);
+  margin-top: var(--space-sm);
+  font-style: italic;
+}
+
 /* ---------- Info Modal ---------- */
 .info-section {
   background: var(--clr-surface-2);
