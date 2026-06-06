@@ -4,13 +4,13 @@
  * v1.0.0
  */
 
-import { t, getLang, toggleLang } from './i18n.js?v=1.4.0';
-import { getProfiles, getActiveProfile, getProfileById, setActiveProfile, createProfile, updateProfile, deleteProfile, validateProfile } from './profiles.js?v=1.4.0';
-import { getSessionDrinks, addDrinkToSession, removeDrinkFromSession, clearSession, pruneOldDrinks, totalAlcoholGrams, formatDrinkTime } from './session.js?v=1.4.0';
-import { calcBAC, hoursUntilBAC, getDrivingStatus, formatBAC, formatSoberTime } from './bac.js?v=1.4.0';
-import { DRINKS_DB, DRINK_CATEGORIES, getDrinksByCategory, searchDrinks } from './drinks-db.js?v=1.4.0';
+import { t, getLang, toggleLang } from './i18n.js?v=1.4.1';
+import { getProfiles, getActiveProfile, getProfileById, setActiveProfile, createProfile, updateProfile, deleteProfile, validateProfile } from './profiles.js?v=1.4.1';
+import { getSessionDrinks, addDrinkToSession, removeDrinkFromSession, clearSession, pruneOldDrinks, totalAlcoholGrams, formatDrinkTime } from './session.js?v=1.4.1';
+import { calcBAC, hoursUntilBAC, getDrivingStatus, formatBAC, formatSoberTime } from './bac.js?v=1.4.1';
+import { DRINKS_DB, DRINK_CATEGORIES, getDrinksByCategory, searchDrinks } from './drinks-db.js?v=1.4.1';
 
-const APP_VERSION = 'v1.4.0';
+const APP_VERSION = 'v1.4.1';
 
 // EU BAC limits — izvor: ETSC 2025 + public sources
 const EU_BAC_LIMITS = [
@@ -209,13 +209,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Country strip + picker
-  $('country-strip').addEventListener('click', openCountryPicker);
-  $('btn-country-cancel').addEventListener('click', closeCountryPicker);
-  $('country-picker-overlay').addEventListener('click', e => {
-    if (e.target === $('country-picker-overlay')) closeCountryPicker();
-  });
-  $('country-search').addEventListener('input', e => renderCountryList(e.target.value));
+  // Country strip + picker (null-safe: old SW might serve this JS with old HTML)
+  if ($('country-strip')) {
+    $('country-strip').addEventListener('click', openCountryPicker);
+    $('btn-country-cancel').addEventListener('click', closeCountryPicker);
+    $('country-picker-overlay').addEventListener('click', e => {
+      if (e.target === $('country-picker-overlay')) closeCountryPicker();
+    });
+    $('country-search').addEventListener('input', e => renderCountryList(e.target.value));
+  }
 
   renderAll();
   navigateTo('home');
@@ -750,6 +752,7 @@ function showToast(msg) {
 // ─── Info Modal ───────────────────────────────────────────────
 // ─── Country Strip & Picker ──────────────────────────────────
 function renderCountryStrip() {
+  if (!$('country-flag')) return; // graceful degradation (SW version mismatch)
   const country = getActiveCountry();
   const lang = getLang();
   const bac = calcBAC(getActiveProfile(), pruneOldDrinks(getActiveProfile()?.id, 24));
