@@ -10,7 +10,7 @@ import { getSessionDrinks, addDrinkToSession, removeDrinkFromSession, clearSessi
 import { calcBAC, hoursUntilBAC, getDrivingStatus, formatBAC, formatSoberTime } from './bac.js';
 import { DRINKS_DB, DRINK_CATEGORIES, getDrinksByCategory, searchDrinks } from './drinks-db.js';
 
-const APP_VERSION = 'v1.1.0';
+const APP_VERSION = 'v1.2.0';
 
 // ─── State ────────────────────────────────────────────────────
 let currentScreen = 'home';
@@ -34,6 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
   $('btn-disclaimer-accept').addEventListener('click', () => {
     localStorage.setItem('bac_disclaimer_accepted', '1');
     $('disclaimer-overlay').style.display = 'none';
+  });
+
+  // Info modal
+  $('btn-info').addEventListener('click', openInfoModal);
+  $('btn-info-close').addEventListener('click', () => $('info-modal-overlay').classList.remove('open'));
+  $('info-modal-overlay').addEventListener('click', e => {
+    if (e.target === $('info-modal-overlay')) $('info-modal-overlay').classList.remove('open');
   });
 
   // Language toggle
@@ -623,6 +630,30 @@ function showToast(msg) {
   toast.textContent = msg;
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ─── Info Modal ───────────────────────────────────────────────
+function openInfoModal() {
+  $('info-modal-title').textContent    = t('infoTitle');
+  $('info-how-title').textContent      = t('infoHowTitle');
+  $('info-how-text').textContent       = t('infoHowText');
+  $('info-factors-title').textContent  = t('infoFactorsTitle');
+  $('info-factors-text').textContent   = t('infoFactorsText');
+  $('info-formula-title').textContent  = t('infoFormulaTitle');
+  $('info-formula-text').textContent   = t('infoFormulaText');
+  $('info-alc-grams-title').textContent = t('infoAlcGramsTitle');
+  $('info-alc-grams-text').textContent  = t('infoAlcGramsText');
+  $('info-limits-title').textContent   = t('infoLimitsTitle');
+  $('btn-info-close').textContent      = t('infoClose');
+  $('info-disclaimer-title').textContent = t('infoDisclaimerTitle');
+  $('info-disclaimer-text').textContent  = t('infoDisclaimerText');
+
+  // Limits — svaka linija kao zaseban div
+  const limitsEl = $('info-limits-text');
+  const lines = t('infoLimitsText').split('\n');
+  limitsEl.innerHTML = lines.map(l => `<div>${esc(l)}</div>`).join('');
+
+  $('info-modal-overlay').classList.add('open');
 }
 
 function esc(str) {

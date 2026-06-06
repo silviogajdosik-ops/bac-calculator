@@ -41,7 +41,10 @@
     <span class="app-header__title" data-i18n="appName">Promilator</span>
     <span class="app-header__subtitle" data-i18n="appTagline">Kalkulator promila</span>
   </div>
-  <button class="btn-lang" id="btn-lang">EN</button>
+  <div style="display:flex; gap:8px; align-items:center;">
+    <button class="btn-lang" id="btn-info" aria-label="Info">ℹ️</button>
+    <button class="btn-lang" id="btn-lang">EN</button>
+  </div>
 </header>
 
 <!-- ═══════════════════════════════════════════════
@@ -187,6 +190,7 @@
       <button class="cat-tab" data-cat="wine">🍷 <span data-i18n="catWine">Vino</span></button>
       <button class="cat-tab" data-cat="spirits">🥃 <span data-i18n="catSpirits">Žestoko</span></button>
       <button class="cat-tab" data-cat="cocktail">🍸 <span data-i18n="catCocktail">Koktel</span></button>
+      <button class="cat-tab" data-cat="cider">🍎 <span data-i18n="catCider">Cider</span></button>
     </div>
 
     <!-- Drink list -->
@@ -291,6 +295,45 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════
+     INFO MODAL
+═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="info-modal-overlay">
+  <div class="modal-sheet" style="max-height:90dvh;">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title" id="info-modal-title">Kako funkcionira?</h2>
+
+    <div class="info-section">
+      <div class="info-section__title" id="info-how-title"></div>
+      <p class="info-section__text" id="info-how-text"></p>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section__title" id="info-factors-title"></div>
+      <p class="info-section__text" id="info-factors-text"></p>
+    </div>
+
+    <div class="info-section info-section--formula">
+      <div class="info-section__title" id="info-formula-title"></div>
+      <p class="info-formula" id="info-formula-text"></p>
+      <div class="info-section__title" id="info-alc-grams-title" style="margin-top:8px;"></div>
+      <p class="info-formula" id="info-alc-grams-text"></p>
+    </div>
+
+    <div class="info-section">
+      <div class="info-section__title" id="info-limits-title"></div>
+      <div class="info-limits" id="info-limits-text"></div>
+    </div>
+
+    <div class="info-section info-section--warning">
+      <div class="info-section__title" id="info-disclaimer-title"></div>
+      <p class="info-section__text" id="info-disclaimer-text"></p>
+    </div>
+
+    <button class="btn btn--primary mt-md" id="btn-info-close" style="width:100%;">Razumijem</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
      TOAST
 ═══════════════════════════════════════════════ -->
 <div class="toast" id="toast"></div>
@@ -298,7 +341,7 @@
 <!-- ═══════════════════════════════════════════════
      SCRIPTS
 ═══════════════════════════════════════════════ -->
-<script type="module" src="js/main.js?v=1.1.0"></script>
+<script type="module" src="js/main.js?v=1.2.0"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
