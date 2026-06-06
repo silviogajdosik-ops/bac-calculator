@@ -4,13 +4,13 @@
  * v1.0.0
  */
 
-import { t, getLang, toggleLang } from './i18n.js?v=1.4.1';
-import { getProfiles, getActiveProfile, getProfileById, setActiveProfile, createProfile, updateProfile, deleteProfile, validateProfile } from './profiles.js?v=1.4.1';
-import { getSessionDrinks, addDrinkToSession, removeDrinkFromSession, clearSession, pruneOldDrinks, totalAlcoholGrams, formatDrinkTime } from './session.js?v=1.4.1';
-import { calcBAC, hoursUntilBAC, getDrivingStatus, formatBAC, formatSoberTime } from './bac.js?v=1.4.1';
-import { DRINKS_DB, DRINK_CATEGORIES, getDrinksByCategory, searchDrinks } from './drinks-db.js?v=1.4.1';
+import { t, getLang, toggleLang } from './i18n.js?v=1.4.2';
+import { getProfiles, getActiveProfile, getProfileById, setActiveProfile, createProfile, updateProfile, deleteProfile, validateProfile } from './profiles.js?v=1.4.2';
+import { getSessionDrinks, addDrinkToSession, removeDrinkFromSession, clearSession, pruneOldDrinks, totalAlcoholGrams, formatDrinkTime } from './session.js?v=1.4.2';
+import { calcBAC, hoursUntilBAC, getDrivingStatus, formatBAC, formatSoberTime } from './bac.js?v=1.4.2';
+import { DRINKS_DB, DRINK_CATEGORIES, getDrinksByCategory, searchDrinks } from './drinks-db.js?v=1.4.2';
 
-const APP_VERSION = 'v1.4.1';
+const APP_VERSION = 'v1.4.2';
 
 // EU BAC limits — izvor: ETSC 2025 + public sources
 const EU_BAC_LIMITS = [

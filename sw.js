@@ -3,19 +3,19 @@
  * Cache-first strategija za offline support
  */
 
-const CACHE_VERSION = 'bac-v1.4.1';
+const CACHE_VERSION = 'bac-v1.4.2';
 const CACHE_NAME = `app-${CACHE_VERSION}`;
 
 const ASSETS = [
   '/bac-calculator/',
   '/bac-calculator/index.html',
   '/bac-calculator/css/style.css',
-  '/bac-calculator/js/main.js?v=1.4.1',
-  '/bac-calculator/js/bac.js?v=1.4.1',
-  '/bac-calculator/js/profiles.js?v=1.4.1',
-  '/bac-calculator/js/session.js?v=1.4.1',
-  '/bac-calculator/js/drinks-db.js?v=1.4.1',
-  '/bac-calculator/js/i18n.js?v=1.4.1',
+  '/bac-calculator/js/main.js?v=1.4.2',
+  '/bac-calculator/js/bac.js?v=1.4.2',
+  '/bac-calculator/js/profiles.js?v=1.4.2',
+  '/bac-calculator/js/session.js?v=1.4.2',
+  '/bac-calculator/js/drinks-db.js?v=1.4.2',
+  '/bac-calculator/js/i18n.js?v=1.4.2',
   '/bac-calculator/manifest.json',
   '/bac-calculator/icons/icon-192.png',
   '/bac-calculator/icons/icon-512.png',
