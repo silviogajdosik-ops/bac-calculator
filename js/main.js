@@ -5,10 +5,12 @@
  */
 
 import { t, getLang, toggleLang } from './i18n.js';
-import { getProfiles, getActiveProfile, setActiveProfile, createProfile, updateProfile, deleteProfile, validateProfile } from './profiles.js';
+import { getProfiles, getActiveProfile, getProfileById, setActiveProfile, createProfile, updateProfile, deleteProfile, validateProfile } from './profiles.js';
 import { getSessionDrinks, addDrinkToSession, removeDrinkFromSession, clearSession, pruneOldDrinks, totalAlcoholGrams, formatDrinkTime } from './session.js';
 import { calcBAC, hoursUntilBAC, getDrivingStatus, formatBAC, formatSoberTime } from './bac.js';
 import { DRINKS_DB, DRINK_CATEGORIES, getDrinksByCategory, searchDrinks } from './drinks-db.js';
+
+const APP_VERSION = 'v1.1.0';
 
 // ─── State ────────────────────────────────────────────────────
 let currentScreen = 'home';
@@ -17,6 +19,7 @@ let selectedVolume = null;      // ml za odabrano piće
 let editingProfileId = null;    // ID profila koji uređujemo
 let activeCat = 'all';          // aktivna kategorija u pickeru
 let bacUpdateInterval = null;   // setInterval za live BAC
+let selectedTimestamp = null;   // timestamp za novo piće (null = now)
 
 // ─── DOM refs ─────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
@@ -141,6 +144,8 @@ function renderI18n() {
     el.textContent = t(el.dataset.i18n);
   });
   $('btn-lang').textContent = t('langToggle');
+  const verEl = $('app-version-display');
+  if (verEl) verEl.textContent = APP_VERSION;
 }
 
 // ─── Home Screen ──────────────────────────────────────────────
@@ -245,15 +250,28 @@ function renderProfiles() {
         <div class="profile-card__meta">${age} god. · ${p.weight} kg · ${p.height} cm</div>
       </div>
       ${isActive ? `<span class="profile-card__badge">${t('activeProfile')}</span>` : ''}
+      <button class="btn btn--ghost btn--icon btn-edit-profile" data-profile-id="${p.id}" aria-label="Edit" style="font-size:1rem; margin-left:auto;">✏️</button>
     </div>`;
   }).join('');
 
-  // Click: select active OR edit
+  // Tap kartice → odaberi profil
   list.querySelectorAll('.profile-card').forEach(card => {
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.btn-edit-profile')) return;
       const id = card.dataset.profileId;
+      const p = getProfileById(id);
       setActiveProfile(id);
-      openProfileForm(id);
+      renderProfiles();
+      renderHome();
+      showToast('👤 ' + esc(p?.name || '') + (getLang() === 'hr' ? ' aktivan' : ' active'));
+    });
+  });
+
+  // Edit tipka → otvori formu
+  list.querySelectorAll('.btn-edit-profile').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openProfileForm(btn.dataset.profileId);
     });
   });
 }
@@ -386,6 +404,57 @@ function renderDrinkList() {
   });
 }
 
+// ─── Time Picker ──────────────────────────────────────────────
+function renderTimePicker() {
+  const lang = getLang();
+  const options = [
+    { label: lang === 'hr' ? 'Sad' : 'Now',    offset: 0  },
+    { label: '5 min',  offset: 5  },
+    { label: '10 min', offset: 10 },
+    { label: '15 min', offset: 15 },
+    { label: '30 min', offset: 30 },
+    { label: '1h',     offset: 60 },
+    { label: lang === 'hr' ? 'Vlastito' : 'Custom', offset: -1 },
+  ];
+
+  const wrap = $('modal-time-options');
+  wrap.innerHTML = options.map(o =>
+    `<button class="vol-btn ${o.offset === 0 ? 'selected' : ''}" data-offset="${o.offset}">${o.label}</button>`
+  ).join('');
+
+  selectedTimestamp = Date.now();
+  $('modal-custom-time').classList.add('hidden');
+  $('modal-time-label').textContent = lang === 'hr' ? 'Kada?' : 'When?';
+
+  wrap.querySelectorAll('.vol-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      wrap.querySelectorAll('.vol-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      const offset = Number(btn.dataset.offset);
+      if (offset === -1) {
+        $('modal-custom-time').classList.remove('hidden');
+        const now = new Date();
+        $('modal-custom-time').value =
+          String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+        selectedTimestamp = null;
+      } else {
+        $('modal-custom-time').classList.add('hidden');
+        selectedTimestamp = Date.now() - offset * 60_000;
+      }
+    });
+  });
+
+  $('modal-custom-time').addEventListener('change', () => {
+    const val = $('modal-custom-time').value;
+    if (!val) return;
+    const [h, m] = val.split(':').map(Number);
+    const now = new Date();
+    const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0);
+    if (target > now) target.setDate(target.getDate() - 1);
+    selectedTimestamp = target.getTime();
+  });
+}
+
 // ─── Drink Modal ──────────────────────────────────────────────
 function openDrinkModal(drink) {
   selectedDrink = drink;
@@ -412,6 +481,7 @@ function openDrinkModal(drink) {
   });
 
   updateModalGrams();
+  renderTimePicker();
 
   $('modal-overlay').classList.add('open');
 }
@@ -443,6 +513,7 @@ function onModalAddDrink() {
     name: selectedDrink.name[lang],
     abv: selectedDrink.abv,
     volumeMl: selectedVolume,
+    timestamp: selectedTimestamp || Date.now(),
   });
 
   closeModal();

@@ -103,10 +103,11 @@
         🍺 <span data-i18n="screenAddDrink">Dodaj piće</span>
       </button>
 
-      <!-- Disclaimer note -->
+      <!-- Disclaimer note + version -->
       <p style="font-size:0.68rem; color:var(--clr-text-faint); text-align:center; margin-top:12px;" data-i18n="disclaimerText">
         Samo za zabavu. Rezultati mogu biti netočni.
       </p>
+      <p id="app-version-display" style="font-size:0.62rem; color:var(--clr-text-faint); text-align:center; margin-top:4px; font-family: var(--font-mono);"></p>
     </div>
 
   </div><!-- /screen-home -->
@@ -276,7 +277,13 @@
       <div class="volume-selector" id="modal-volume-options"></div>
     </div>
 
-    <div id="modal-grams" style="font-size: 0.82rem; color: var(--clr-text-dim); margin: 8px 0 16px; text-align: center;"></div>
+    <div id="modal-grams" style="font-size: 0.82rem; color: var(--clr-text-dim); margin: 8px 0 12px; text-align: center;"></div>
+
+    <div class="form-group">
+      <label class="form-label" id="modal-time-label">Kada?</label>
+      <div class="volume-selector" id="modal-time-options" style="flex-wrap: wrap; gap: 6px;"></div>
+      <input class="form-input mt-sm hidden" type="time" id="modal-custom-time" />
+    </div>
 
     <button class="btn btn--primary" id="btn-modal-add" data-i18n="btnAddDrink">Dodaj u sesiju</button>
     <button class="btn btn--ghost mt-sm" id="btn-modal-close" data-i18n="btnClose" style="width:100%;">Zatvori</button>
@@ -291,7 +298,7 @@
 <!-- ═══════════════════════════════════════════════
      SCRIPTS
 ═══════════════════════════════════════════════ -->
-<script type="module" src="js/main.js?v=1.0.0"></script>
+<script type="module" src="js/main.js?v=1.1.0"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

@@ -143,8 +143,8 @@ DrinkEntry {
 ## Current State
 
 **Branch:** `main`
-**Zadnji commit:** `v1.0.0 — initial`
-**APP_VERSION:** `v1.0.0`
+**Zadnji commit:** `v1.1.0 — profile UX, time picker, version display`
+**APP_VERSION:** `v1.1.0`
 
 ---
 
@@ -152,6 +152,7 @@ DrinkEntry {
 
 | Verzija | Feature |
 |---------|---------|
+| v1.1.0  | Profile tap=select, time picker pri dodavanju pića, version display |
 | v1.0.0  | Initial release: profili, BAC engine, alkohol DB, PWA |
 
 ---
