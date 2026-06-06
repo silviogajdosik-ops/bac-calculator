@@ -79,6 +79,21 @@
         <span class="active-profile-strip__chevron">›</span>
       </div>
 
+      <!-- Country strip -->
+      <div class="country-strip" id="country-strip">
+        <div class="country-strip__left">
+          <div class="country-strip__label" data-i18n="countryLabel">Zemlja vožnje</div>
+          <div class="country-strip__name">
+            <span id="country-flag">🇭🇷</span>
+            <span id="country-name-display">Hrvatska</span>
+          </div>
+        </div>
+        <div class="country-strip__right">
+          <span class="country-limit-badge ok" id="country-limit-badge">0.5 ‰</span>
+          <span class="country-strip__chevron">›</span>
+        </div>
+      </div>
+
       <!-- BAC Meter -->
       <div class="bac-meter">
         <div class="bac-meter__label" data-i18n="currentBAC">Trenutni promili</div>
@@ -297,6 +312,17 @@
 <!-- ═══════════════════════════════════════════════
      INFO MODAL
 ═══════════════════════════════════════════════ -->
+<!-- ── COUNTRY PICKER MODAL ── -->
+<div class="modal-overlay" id="country-picker-overlay">
+  <div class="modal country-picker-modal">
+    <h3 class="modal-title" data-i18n="countryPickerTitle">Odaberi zemlju</h3>
+    <input class="country-search-input" id="country-search" type="search"
+           data-i18n-placeholder="searchCountry" placeholder="Pretraži..." autocomplete="off" />
+    <div class="country-list" id="country-list"></div>
+    <button class="btn btn--ghost mt-sm" id="btn-country-cancel" style="width:100%;" data-i18n="btnCancel">Odustani</button>
+  </div>
+</div>
+
 <div class="modal-overlay" id="info-modal-overlay">
   <div class="modal-sheet" style="max-height:90dvh;">
     <div class="modal-handle"></div>
@@ -347,7 +373,7 @@
 <!-- ═══════════════════════════════════════════════
      SCRIPTS
 ═══════════════════════════════════════════════ -->
-<script type="module" src="js/main.js?v=1.3.0"></script>
+<script type="module" src="js/main.js?v=1.4.0"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

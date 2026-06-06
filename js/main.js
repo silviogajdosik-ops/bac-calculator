@@ -4,13 +4,13 @@
  * v1.0.0
  */
 
-import { t, getLang, toggleLang } from './i18n.js?v=1.3.0';
-import { getProfiles, getActiveProfile, getProfileById, setActiveProfile, createProfile, updateProfile, deleteProfile, validateProfile } from './profiles.js?v=1.3.0';
-import { getSessionDrinks, addDrinkToSession, removeDrinkFromSession, clearSession, pruneOldDrinks, totalAlcoholGrams, formatDrinkTime } from './session.js?v=1.3.0';
-import { calcBAC, hoursUntilBAC, getDrivingStatus, formatBAC, formatSoberTime } from './bac.js?v=1.3.0';
-import { DRINKS_DB, DRINK_CATEGORIES, getDrinksByCategory, searchDrinks } from './drinks-db.js?v=1.3.0';
+import { t, getLang, toggleLang } from './i18n.js?v=1.4.0';
+import { getProfiles, getActiveProfile, getProfileById, setActiveProfile, createProfile, updateProfile, deleteProfile, validateProfile } from './profiles.js?v=1.4.0';
+import { getSessionDrinks, addDrinkToSession, removeDrinkFromSession, clearSession, pruneOldDrinks, totalAlcoholGrams, formatDrinkTime } from './session.js?v=1.4.0';
+import { calcBAC, hoursUntilBAC, getDrivingStatus, formatBAC, formatSoberTime } from './bac.js?v=1.4.0';
+import { DRINKS_DB, DRINK_CATEGORIES, getDrinksByCategory, searchDrinks } from './drinks-db.js?v=1.4.0';
 
-const APP_VERSION = 'v1.3.0';
+const APP_VERSION = 'v1.4.0';
 
 // EU BAC limits — izvor: ETSC 2025 + public sources
 const EU_BAC_LIMITS = [
@@ -58,6 +58,63 @@ const EU_BAC_LIMITS = [
   },
 ];
 
+// Popis europskih zemalja s BAC granicama (ETSC 2025 + public sources)
+const COUNTRIES = [
+  { id: 'al', flag: '🇦🇱', hr: 'Albanija',        en: 'Albania',               bac: 0.1 },
+  { id: 'at', flag: '🇦🇹', hr: 'Austrija',        en: 'Austria',               bac: 0.5 },
+  { id: 'be', flag: '🇧🇪', hr: 'Belgija',         en: 'Belgium',               bac: 0.5 },
+  { id: 'by', flag: '🇧🇾', hr: 'Bjelorusija',     en: 'Belarus',               bac: 0.0 },
+  { id: 'ba', flag: '🇧🇦', hr: 'BiH',             en: 'Bosnia & Herz.',        bac: 0.3 },
+  { id: 'bg', flag: '🇧🇬', hr: 'Bugarska',        en: 'Bulgaria',              bac: 0.5 },
+  { id: 'cy', flag: '🇨🇾', hr: 'Cipar',           en: 'Cyprus',                bac: 0.5 },
+  { id: 'me', flag: '🇲🇪', hr: 'Crna Gora',       en: 'Montenegro',            bac: 0.3 },
+  { id: 'cz', flag: '🇨🇿', hr: 'Češka',           en: 'Czech Republic',        bac: 0.0 },
+  { id: 'dk', flag: '🇩🇰', hr: 'Danska',          en: 'Denmark',               bac: 0.5 },
+  { id: 'ee', flag: '🇪🇪', hr: 'Estonija',        en: 'Estonia',               bac: 0.2 },
+  { id: 'fi', flag: '🇫🇮', hr: 'Finska',          en: 'Finland',               bac: 0.5 },
+  { id: 'fr', flag: '🇫🇷', hr: 'Francuska',       en: 'France',                bac: 0.5 },
+  { id: 'gr', flag: '🇬🇷', hr: 'Grčka',           en: 'Greece',                bac: 0.5 },
+  { id: 'hr', flag: '🇭🇷', hr: 'Hrvatska',        en: 'Croatia',               bac: 0.5 },
+  { id: 'ie', flag: '🇮🇪', hr: 'Irska',           en: 'Ireland',               bac: 0.5 },
+  { id: 'is', flag: '🇮🇸', hr: 'Island',          en: 'Iceland',               bac: 0.5 },
+  { id: 'it', flag: '🇮🇹', hr: 'Italija',         en: 'Italy',                 bac: 0.5 },
+  { id: 'xk', flag: '🇽🇰', hr: 'Kosovo',          en: 'Kosovo',                bac: 0.5 },
+  { id: 'lv', flag: '🇱🇻', hr: 'Latvija',         en: 'Latvia',                bac: 0.5 },
+  { id: 'li', flag: '🇱🇮', hr: 'Lihtenštajn',    en: 'Liechtenstein',         bac: 0.5 },
+  { id: 'lt', flag: '🇱🇹', hr: 'Litva',           en: 'Lithuania',             bac: 0.4 },
+  { id: 'lu', flag: '🇱🇺', hr: 'Luksemburg',     en: 'Luxembourg',            bac: 0.5 },
+  { id: 'hu', flag: '🇭🇺', hr: 'Mađarska',        en: 'Hungary',               bac: 0.0 },
+  { id: 'mt', flag: '🇲🇹', hr: 'Malta',           en: 'Malta',                 bac: 0.5 },
+  { id: 'md', flag: '🇲🇩', hr: 'Moldavija',       en: 'Moldova',               bac: 0.3 },
+  { id: 'nl', flag: '🇳🇱', hr: 'Nizozemska',      en: 'Netherlands',           bac: 0.5 },
+  { id: 'no', flag: '🇳🇴', hr: 'Norveška',        en: 'Norway',                bac: 0.2 },
+  { id: 'de', flag: '🇩🇪', hr: 'Njemačka',        en: 'Germany',               bac: 0.5 },
+  { id: 'pl', flag: '🇵🇱', hr: 'Poljska',         en: 'Poland',                bac: 0.2 },
+  { id: 'pt', flag: '🇵🇹', hr: 'Portugal',        en: 'Portugal',              bac: 0.5 },
+  { id: 'ro', flag: '🇷🇴', hr: 'Rumunjska',       en: 'Romania',               bac: 0.0 },
+  { id: 'ru', flag: '🇷🇺', hr: 'Rusija',          en: 'Russia',                bac: 0.3 },
+  { id: 'mk', flag: '🇲🇰', hr: 'Sj. Makedonija',  en: 'N. Macedonia',          bac: 0.5 },
+  { id: 'sk', flag: '🇸🇰', hr: 'Slovačka',        en: 'Slovakia',              bac: 0.0 },
+  { id: 'si', flag: '🇸🇮', hr: 'Slovenija',       en: 'Slovenia',              bac: 0.5 },
+  { id: 'rs', flag: '🇷🇸', hr: 'Srbija',          en: 'Serbia',                bac: 0.3 },
+  { id: 'es', flag: '🇪🇸', hr: 'Španjolska',      en: 'Spain',                 bac: 0.5 },
+  { id: 'gb-sct', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', hr: 'Škotska', en: 'Scotland',          bac: 0.5 },
+  { id: 'se', flag: '🇸🇪', hr: 'Švedska',         en: 'Sweden',                bac: 0.2 },
+  { id: 'ch', flag: '🇨🇭', hr: 'Švicarska',       en: 'Switzerland',           bac: 0.5 },
+  { id: 'tr', flag: '🇹🇷', hr: 'Turska',          en: 'Turkey',                bac: 0.5 },
+  { id: 'ua', flag: '🇺🇦', hr: 'Ukrajna',         en: 'Ukraine',               bac: 0.2 },
+  { id: 'gb', flag: '🇬🇧', hr: 'UK (Engl./Wales/S.Irska)', en: 'UK (Eng./Wales/N.I.)', bac: 0.8 },
+];
+
+function getActiveCountry() {
+  return COUNTRIES.find(c => c.id === activeCountryId) || COUNTRIES.find(c => c.id === 'hr');
+}
+
+function setActiveCountry(id) {
+  activeCountryId = id;
+  localStorage.setItem('bac_country', id);
+}
+
 // ─── State ────────────────────────────────────────────────────
 let currentScreen = 'home';
 let selectedDrink = null;       // piće odabrano u pickeru
@@ -66,6 +123,7 @@ let editingProfileId = null;    // ID profila koji uređujemo
 let activeCat = 'all';          // aktivna kategorija u pickeru
 let bacUpdateInterval = null;   // setInterval za live BAC
 let selectedTimestamp = null;   // timestamp za novo piće (null = now)
+let activeCountryId = localStorage.getItem('bac_country') || 'hr'; // odabrana zemlja
 
 // ─── DOM refs ─────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
@@ -151,6 +209,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Country strip + picker
+  $('country-strip').addEventListener('click', openCountryPicker);
+  $('btn-country-cancel').addEventListener('click', closeCountryPicker);
+  $('country-picker-overlay').addEventListener('click', e => {
+    if (e.target === $('country-picker-overlay')) closeCountryPicker();
+  });
+  $('country-search').addEventListener('input', e => renderCountryList(e.target.value));
+
   renderAll();
   navigateTo('home');
   startBACTimer();
@@ -213,6 +279,9 @@ function renderHome() {
 
   $('home-no-profile').classList.add('hidden');
   $('home-content').classList.remove('hidden');
+
+  // Country strip
+  renderCountryStrip();
 
   // Profile strip
   $('active-profile-name').textContent = profile.name;
@@ -679,6 +748,64 @@ function showToast(msg) {
 }
 
 // ─── Info Modal ───────────────────────────────────────────────
+// ─── Country Strip & Picker ──────────────────────────────────
+function renderCountryStrip() {
+  const country = getActiveCountry();
+  const lang = getLang();
+  const bac = calcBAC(getActiveProfile(), pruneOldDrinks(getActiveProfile()?.id, 24));
+
+  const overLimit = bac > 0 && bac >= country.bac;
+  const underLimit = bac > 0 && bac < country.bac;
+  const sober = bac === 0;
+
+  $('country-flag').textContent  = country.flag;
+  $('country-name-display').textContent = country[lang];
+  const limitBadge = $('country-limit-badge');
+  limitBadge.textContent = country.bac.toFixed(1) + ' ‰';
+  limitBadge.className = 'country-limit-badge';
+  if (sober || underLimit) limitBadge.classList.add('ok');
+  if (overLimit) limitBadge.classList.add('over');
+}
+
+function openCountryPicker() {
+  renderCountryList('');
+  $('country-search').value = '';
+  $('country-picker-overlay').classList.add('open');
+  $('country-search').focus();
+}
+
+function closeCountryPicker() {
+  $('country-picker-overlay').classList.remove('open');
+}
+
+function renderCountryList(query) {
+  const lang = getLang();
+  const q = query.toLowerCase().trim();
+  const filtered = q
+    ? COUNTRIES.filter(c => c[lang].toLowerCase().includes(q) || c.en.toLowerCase().includes(q))
+    : COUNTRIES;
+
+  $('country-list').innerHTML = filtered.map(country => {
+    const active = country.id === activeCountryId ? ' active' : '';
+    const bacColor = country.bac === 0 ? 'danger' : country.bac <= 0.2 ? 'warn' : country.bac <= 0.5 ? 'ok' : 'dim';
+    return `<div class="country-item${active}" data-id="${country.id}">
+      <span class="country-item__flag">${country.flag}</span>
+      <span class="country-item__name">${esc(country[lang])}</span>
+      <span class="country-item__bac bac-${bacColor}">${country.bac.toFixed(1)} ‰</span>
+    </div>`;
+  }).join('');
+
+  // Event listeners
+  $('country-list').querySelectorAll('.country-item').forEach(el => {
+    el.addEventListener('click', () => {
+      setActiveCountry(el.dataset.id);
+      closeCountryPicker();
+      renderCountryStrip();
+      renderBACMeter();
+    });
+  });
+}
+
 function openInfoModal() {
   $('info-modal-title').textContent    = t('infoTitle');
   $('info-how-title').textContent      = t('infoHowTitle');

@@ -124,6 +124,9 @@ export const TRANSLATIONS = {
     // Time labels
     timeLabel: 'Dodano',
     activeProfile: 'Aktivan profil',
+    countryLabel: 'Zemlja vožnje',
+    countryPickerTitle: 'Odaberi zemlju',
+    searchCountry: 'Pretraži zemlju...',
     switchProfile: 'Promijeni profil',
   },
 
@@ -248,6 +251,9 @@ export const TRANSLATIONS = {
     // Time labels
     timeLabel: 'Added',
     activeProfile: 'Active profile',
+    countryLabel: 'Country (driving)',
+    countryPickerTitle: 'Select country',
+    searchCountry: 'Search country...',
     switchProfile: 'Switch profile',
   },
 };
