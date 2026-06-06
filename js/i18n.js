@@ -103,10 +103,7 @@ export const TRANSLATIONS = {
     infoAlcGramsTitle: 'Grame alkohola',
     infoAlcGramsText: 'ml pića × % alkohola × 0.789 (gustoća etanola)',
     infoLimitsTitle: 'Granice za vožnju (HR)',
-    infoLimitsText: '0.00 ‰ — početnici, motori, profesionalni
-0.50 ‰ — opća granica
-0.50–1.50 ‰ — prekršaj (kazna + bodovi)
->1.50 ‰ — kazneno djelo',
+    infoLimitsText: '0.00 ‰ — početnici, motori, profesionalni\n0.50 ‰ — opća granica\n0.50–1.50 ‰ — prekršaj (kazna + bodovi)\n>1.50 ‰ — kazneno djelo',
     infoDisclaimerTitle: '⚠️ Važno upozorenje',
     infoDisclaimerText: 'Rezultati su procjena. Stvarni BAC može se razlikovati ovisno o hrani, lijekovima, individualnom metabolizmu i drugim faktorima. Nikada ne voziš nakon konzumacije alkohola. Ova aplikacija nije zamjena za alkomat.',
     infoClose: 'Razumijem',
@@ -228,10 +225,7 @@ export const TRANSLATIONS = {
     infoAlcGramsTitle: 'Grams of alcohol',
     infoAlcGramsText: 'ml of drink × alcohol % × 0.789 (ethanol density)',
     infoLimitsTitle: 'Driving limits (HR)',
-    infoLimitsText: '0.00 ‰ — beginners, motorcycles, professional
-0.50 ‰ — general limit
-0.50–1.50 ‰ — infraction (fine + points)
->1.50 ‰ — criminal offense',
+    infoLimitsText: '0.00 ‰ — beginners, motorcycles, professional\n0.50 ‰ — general limit\n0.50–1.50 ‰ — infraction (fine + points)\n>1.50 ‰ — criminal offense',
     infoDisclaimerTitle: '⚠️ Important warning',
     infoDisclaimerText: 'Results are estimates. Actual BAC may differ depending on food, medications, individual metabolism and other factors. Never drive after consuming alcohol. This app is not a substitute for a breathalyzer.',
     infoClose: 'Got it',

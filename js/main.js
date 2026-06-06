@@ -10,7 +10,7 @@ import { getSessionDrinks, addDrinkToSession, removeDrinkFromSession, clearSessi
 import { calcBAC, hoursUntilBAC, getDrivingStatus, formatBAC, formatSoberTime } from './bac.js';
 import { DRINKS_DB, DRINK_CATEGORIES, getDrinksByCategory, searchDrinks } from './drinks-db.js';
 
-const APP_VERSION = 'v1.2.0';
+const APP_VERSION = 'v1.2.1';
 
 // ─── State ────────────────────────────────────────────────────
 let currentScreen = 'home';
