@@ -1,0 +1,368 @@
+/**
+ * drinks-db.js — baza alkoholnih pića
+ * abv: postotak alkohola (0–1, npr. 0.05 = 5%)
+ * servingMl: tipična veličina porcije u ml
+ * category: 'beer' | 'wine' | 'spirits' | 'cocktail' | 'cider'
+ */
+
+export const DRINKS_DB = [
+  // === PIVA ===
+  {
+    id: 'ozujsko-pivo',
+    name: { hr: 'Ožujsko pivo', en: 'Ožujsko Beer' },
+    brand: 'Ožujsko',
+    abv: 0.05,
+    servingMl: 500,
+    servingOptions: [330, 500],
+    category: 'beer',
+    icon: '🍺',
+  },
+  {
+    id: 'karlovacko',
+    name: { hr: 'Karlovačko pivo', en: 'Karlovačko Beer' },
+    brand: 'Karlovačko',
+    abv: 0.05,
+    servingMl: 500,
+    servingOptions: [330, 500],
+    category: 'beer',
+    icon: '🍺',
+  },
+  {
+    id: 'pan-pivo',
+    name: { hr: 'Pan pivo', en: 'Pan Beer' },
+    brand: 'Pan',
+    abv: 0.049,
+    servingMl: 500,
+    servingOptions: [330, 500],
+    category: 'beer',
+    icon: '🍺',
+  },
+  {
+    id: 'heineken',
+    name: { hr: 'Heineken', en: 'Heineken' },
+    brand: 'Heineken',
+    abv: 0.05,
+    servingMl: 330,
+    servingOptions: [330, 500],
+    category: 'beer',
+    icon: '🍺',
+  },
+  {
+    id: 'corona',
+    name: { hr: 'Corona Extra', en: 'Corona Extra' },
+    brand: 'Corona',
+    abv: 0.046,
+    servingMl: 330,
+    servingOptions: [330],
+    category: 'beer',
+    icon: '🍺',
+  },
+  {
+    id: 'stella-artois',
+    name: { hr: 'Stella Artois', en: 'Stella Artois' },
+    brand: 'Stella Artois',
+    abv: 0.05,
+    servingMl: 330,
+    servingOptions: [330, 500],
+    category: 'beer',
+    icon: '🍺',
+  },
+  {
+    id: 'guinness',
+    name: { hr: 'Guinness', en: 'Guinness' },
+    brand: 'Guinness',
+    abv: 0.042,
+    servingMl: 500,
+    servingOptions: [330, 500],
+    category: 'beer',
+    icon: '🍺',
+  },
+  {
+    id: 'craft-ipa',
+    name: { hr: 'Craft IPA', en: 'Craft IPA' },
+    brand: 'Craft',
+    abv: 0.065,
+    servingMl: 330,
+    servingOptions: [330, 500],
+    category: 'beer',
+    icon: '🍺',
+  },
+
+  // === ŽESTOKA PIĆA ===
+  {
+    id: 'jack-daniels',
+    name: { hr: 'Jack Daniel\'s', en: 'Jack Daniel\'s' },
+    brand: 'Jack Daniel\'s',
+    abv: 0.40,
+    servingMl: 40,
+    servingOptions: [20, 40, 60],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'jim-beam',
+    name: { hr: 'Jim Beam', en: 'Jim Beam' },
+    brand: 'Jim Beam',
+    abv: 0.40,
+    servingMl: 40,
+    servingOptions: [20, 40, 60],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'johnnie-walker-red',
+    name: { hr: 'Johnnie Walker Red', en: 'Johnnie Walker Red' },
+    brand: 'Johnnie Walker',
+    abv: 0.40,
+    servingMl: 40,
+    servingOptions: [20, 40, 60],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'jameson',
+    name: { hr: 'Jameson Irish Whiskey', en: 'Jameson Irish Whiskey' },
+    brand: 'Jameson',
+    abv: 0.40,
+    servingMl: 40,
+    servingOptions: [20, 40, 60],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'loza',
+    name: { hr: 'Loza (Grappa)', en: 'Loza (Grappa)' },
+    brand: 'Domaća',
+    abv: 0.40,
+    servingMl: 30,
+    servingOptions: [20, 30, 50],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'sljivovica',
+    name: { hr: 'Šljivovica', en: 'Plum Brandy' },
+    brand: 'Domaća',
+    abv: 0.45,
+    servingMl: 30,
+    servingOptions: [20, 30, 50],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'travarica',
+    name: { hr: 'Travarica', en: 'Herbal Brandy' },
+    brand: 'Domaća',
+    abv: 0.40,
+    servingMl: 30,
+    servingOptions: [20, 30, 50],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'vodka-standard',
+    name: { hr: 'Votka (standardna)', en: 'Vodka (standard)' },
+    brand: 'Generic',
+    abv: 0.40,
+    servingMl: 40,
+    servingOptions: [20, 40, 60],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'absolut',
+    name: { hr: 'Absolut Vodka', en: 'Absolut Vodka' },
+    brand: 'Absolut',
+    abv: 0.40,
+    servingMl: 40,
+    servingOptions: [20, 40, 60],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'bacardi-white',
+    name: { hr: 'Bacardi Bijeli Rum', en: 'Bacardi White Rum' },
+    brand: 'Bacardi',
+    abv: 0.375,
+    servingMl: 40,
+    servingOptions: [20, 40, 60],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'gin-standard',
+    name: { hr: 'Gin (standardni)', en: 'Gin (standard)' },
+    brand: 'Generic',
+    abv: 0.40,
+    servingMl: 40,
+    servingOptions: [20, 40, 60],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'gordon-gin',
+    name: { hr: 'Gordon\'s Gin', en: 'Gordon\'s Gin' },
+    brand: "Gordon's",
+    abv: 0.375,
+    servingMl: 40,
+    servingOptions: [20, 40, 60],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'jagermeister',
+    name: { hr: 'Jägermeister', en: 'Jägermeister' },
+    brand: 'Jägermeister',
+    abv: 0.35,
+    servingMl: 20,
+    servingOptions: [20, 40],
+    category: 'spirits',
+    icon: '🥃',
+  },
+  {
+    id: 'tequila',
+    name: { hr: 'Tequila', en: 'Tequila' },
+    brand: 'Generic',
+    abv: 0.38,
+    servingMl: 40,
+    servingOptions: [20, 40, 60],
+    category: 'spirits',
+    icon: '🥃',
+  },
+
+  // === VINA ===
+  {
+    id: 'vino-bijelo',
+    name: { hr: 'Bijelo vino', en: 'White Wine' },
+    brand: 'Generic',
+    abv: 0.12,
+    servingMl: 150,
+    servingOptions: [100, 150, 200],
+    category: 'wine',
+    icon: '🍷',
+  },
+  {
+    id: 'vino-crno',
+    name: { hr: 'Crno vino', en: 'Red Wine' },
+    brand: 'Generic',
+    abv: 0.13,
+    servingMl: 150,
+    servingOptions: [100, 150, 200],
+    category: 'wine',
+    icon: '🍷',
+  },
+  {
+    id: 'rose',
+    name: { hr: 'Rosé vino', en: 'Rosé Wine' },
+    brand: 'Generic',
+    abv: 0.12,
+    servingMl: 150,
+    servingOptions: [100, 150, 200],
+    category: 'wine',
+    icon: '🍷',
+  },
+  {
+    id: 'prosecco',
+    name: { hr: 'Prosecco', en: 'Prosecco' },
+    brand: 'Generic',
+    abv: 0.11,
+    servingMl: 150,
+    servingOptions: [100, 150],
+    category: 'wine',
+    icon: '🥂',
+  },
+  {
+    id: 'champagne',
+    name: { hr: 'Champagne', en: 'Champagne' },
+    brand: 'Generic',
+    abv: 0.12,
+    servingMl: 150,
+    servingOptions: [100, 150],
+    category: 'wine',
+    icon: '🥂',
+  },
+
+  // === KOKTELI ===
+  {
+    id: 'gin-tonic',
+    name: { hr: 'Gin & Tonic', en: 'Gin & Tonic' },
+    brand: 'Cocktail',
+    abv: 0.065,
+    servingMl: 250,
+    servingOptions: [200, 250, 300],
+    category: 'cocktail',
+    icon: '🍹',
+  },
+  {
+    id: 'cuba-libre',
+    name: { hr: 'Cuba Libre', en: 'Cuba Libre' },
+    brand: 'Cocktail',
+    abv: 0.07,
+    servingMl: 250,
+    servingOptions: [200, 250, 300],
+    category: 'cocktail',
+    icon: '🍹',
+  },
+  {
+    id: 'mojito',
+    name: { hr: 'Mojito', en: 'Mojito' },
+    brand: 'Cocktail',
+    abv: 0.065,
+    servingMl: 300,
+    servingOptions: [250, 300],
+    category: 'cocktail',
+    icon: '🍹',
+  },
+  {
+    id: 'aperol-spritz',
+    name: { hr: 'Aperol Spritz', en: 'Aperol Spritz' },
+    brand: 'Aperol',
+    abv: 0.085,
+    servingMl: 250,
+    servingOptions: [200, 250],
+    category: 'cocktail',
+    icon: '🍹',
+  },
+];
+
+/** Kategorije za filtriranje */
+export const DRINK_CATEGORIES = [
+  { id: 'all',      label: { hr: 'Sve',      en: 'All'      }, icon: '🍹' },
+  { id: 'beer',     label: { hr: 'Pivo',     en: 'Beer'     }, icon: '🍺' },
+  { id: 'wine',     label: { hr: 'Vino',     en: 'Wine'     }, icon: '🍷' },
+  { id: 'spirits',  label: { hr: 'Žestoko',  en: 'Spirits'  }, icon: '🥃' },
+  { id: 'cocktail', label: { hr: 'Koktel',   en: 'Cocktail' }, icon: '🍸' },
+];
+
+/**
+ * Pronađi piće po ID-u
+ * @param {string} id
+ * @returns {object|undefined}
+ */
+export function getDrinkById(id) {
+  return DRINKS_DB.find(d => d.id === id);
+}
+
+/**
+ * Filtriraj piće po kategoriji
+ * @param {string} category — 'all' ili specifična kategorija
+ * @returns {object[]}
+ */
+export function getDrinksByCategory(category) {
+  if (category === 'all') return DRINKS_DB;
+  return DRINKS_DB.filter(d => d.category === category);
+}
+
+/**
+ * Pretraži piće po imenu
+ * @param {string} query
+ * @param {string} lang — 'hr' | 'en'
+ * @returns {object[]}
+ */
+export function searchDrinks(query, lang = 'hr') {
+  const q = query.toLowerCase();
+  return DRINKS_DB.filter(d =>
+    d.name[lang].toLowerCase().includes(q) ||
+    d.brand.toLowerCase().includes(q)
+  );
+}

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1a1a24" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Promilator" />
+  <meta name="description" content="BAC Calculator — Kalkulator promila alkohola" />
+  <title>Promilator</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     DISCLAIMER OVERLAY (prikazuje se pri prvom pokretanju)
+═══════════════════════════════════════════════ -->
+<div class="disclaimer-overlay" id="disclaimer-overlay" style="display:none;">
+  <div class="disclaimer-box">
+    <div class="disclaimer-box__icon">⚠️</div>
+    <div class="disclaimer-box__title" data-i18n="disclaimerTitle">⚠️ Upozorenje</div>
+    <p class="disclaimer-box__text" data-i18n="disclaimerText">
+      Ova aplikacija je isključivo za zabavu. Rezultati su procjena i mogu se značajno
+      razlikovati od stvarnih vrijednosti. Nikada ne voziš ako si konzumirao/la alkohol.
+      Za točne rezultate koristite alkomat.
+    </p>
+    <button class="btn btn--primary" id="btn-disclaimer-accept" data-i18n="disclaimerAccept">
+      Razumijem
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════ -->
+<header class="app-header">
+  <div class="app-header__left">
+    <span class="app-header__title" data-i18n="appName">Promilator</span>
+    <span class="app-header__subtitle" data-i18n="appTagline">Kalkulator promila</span>
+  </div>
+  <button class="btn-lang" id="btn-lang">EN</button>
+</header>
+
+<!-- ═══════════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════════ -->
+<main class="app-main">
+
+  <!-- ── HOME SCREEN ── -->
+  <div class="screen" id="screen-home">
+
+    <!-- No profile state -->
+    <div id="home-no-profile" class="hidden">
+      <div class="no-profile-notice">
+        <div class="no-profile-notice__icon">👤</div>
+        <p data-i18n="noProfiles">Nema profila. Dodaj novi!</p>
+        <button class="btn btn--primary" onclick="document.querySelector('[data-screen=profiles]').click()">
+          <span data-i18n="btnAddProfile">Novi profil</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main content (visible when profile exists) -->
+    <div id="home-content">
+
+      <!-- Active profile strip -->
+      <div class="active-profile-strip" id="active-profile-strip">
+        <div>
+          <div class="active-profile-strip__label" data-i18n="activeProfile">Aktivan profil</div>
+          <div class="active-profile-strip__name" id="active-profile-name">—</div>
+          <div class="text-dim" style="font-size:0.72rem;" id="active-profile-meta"></div>
+        </div>
+        <span class="active-profile-strip__chevron">›</span>
+      </div>
+
+      <!-- BAC Meter -->
+      <div class="bac-meter">
+        <div class="bac-meter__label" data-i18n="currentBAC">Trenutni promili</div>
+        <div class="bac-meter__value" id="bac-value">0.00</div>
+        <div class="bac-meter__unit">‰</div>
+        <div class="bac-bar-wrap"><div class="bac-bar" id="bac-bar"></div></div>
+        <div class="driving-badge safe" id="driving-badge">✅ Možeš voziti</div>
+        <div class="sober-time" id="sober-time"></div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-card__value" id="stat-drinks">0</div>
+          <div class="stat-card__label" data-i18n="drinkCount">Pića</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value" id="stat-alcohol">0.0 g</div>
+          <div class="stat-card__label" data-i18n="totalAlcohol">Ukupno alkohola</div>
+        </div>
+      </div>
+
+      <!-- Quick add button -->
+      <button class="btn btn--primary mt-md" onclick="document.querySelector('[data-screen=drink]').click()">
+        🍺 <span data-i18n="screenAddDrink">Dodaj piće</span>
+      </button>
+
+      <!-- Disclaimer note -->
+      <p style="font-size:0.68rem; color:var(--clr-text-faint); text-align:center; margin-top:12px;" data-i18n="disclaimerText">
+        Samo za zabavu. Rezultati mogu biti netočni.
+      </p>
+    </div>
+
+  </div><!-- /screen-home -->
+
+
+  <!-- ── PROFILES SCREEN ── -->
+  <div class="screen" id="screen-profiles">
+
+    <div class="section-header mb-md">
+      <span class="section-title" data-i18n="screenProfiles">Profili</span>
+      <button class="btn btn--secondary btn--sm" id="btn-new-profile" data-i18n="btnNewProfile">+ Novi profil</button>
+    </div>
+
+    <div id="profiles-list"></div>
+
+    <!-- Profile Form (inline panel) -->
+    <div id="profile-form-screen" class="card mt-md hidden" style="padding: var(--space-md);">
+      <h2 class="modal-title" id="profile-form-title" style="text-align:left; margin-bottom: var(--space-md);">Novi profil</h2>
+      <form id="profile-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" data-i18n="profileName">Ime</label>
+          <input class="form-input" id="input-name" type="text" autocomplete="off" />
+          <div class="form-error" id="err-name"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" data-i18n="profileWeight">Težina (kg)</label>
+            <input class="form-input" id="input-weight" type="number" min="30" max="300" />
+            <div class="form-error" id="err-weight"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="profileHeight">Visina (cm)</label>
+            <input class="form-input" id="input-height" type="number" min="100" max="250" />
+            <div class="form-error" id="err-height"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="profileGender">Spol</label>
+          <div class="gender-toggle">
+            <button type="button" class="gender-btn selected" data-value="male">👨 <span data-i18n="genderMale">Muški</span></button>
+            <button type="button" class="gender-btn" data-value="female">👩 <span data-i18n="genderFemale">Ženski</span></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="profileBirthYear">Godina rođenja</label>
+          <input class="form-input" id="input-birthyear" type="number" min="1920" max="2010" placeholder="npr. 1990" />
+          <div class="form-error" id="err-birthyear"></div>
+        </div>
+        <div style="display:flex; gap: 8px; margin-top: var(--space-md);">
+          <button type="submit" class="btn btn--primary" style="flex:1;" data-i18n="btnSave">Spremi</button>
+          <button type="button" class="btn btn--secondary" id="btn-profile-form-cancel" data-i18n="btnCancel">Odustani</button>
+          <button type="button" class="btn btn--danger btn--sm hidden" id="btn-profile-delete">🗑</button>
+        </div>
+      </form>
+    </div>
+
+  </div><!-- /screen-profiles -->
+
+
+  <!-- ── ADD DRINK SCREEN ── -->
+  <div class="screen" id="screen-drink">
+
+    <div class="section-header mb-md">
+      <span class="section-title" data-i18n="screenAddDrink">Dodaj piće</span>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar">
+      <input class="search-bar__input" id="search-input" type="search" placeholder="Pretraži... / Search..." />
+      <span class="search-bar__icon">🔍</span>
+    </div>
+
+    <!-- Category tabs -->
+    <div class="category-tabs">
+      <button class="cat-tab active" data-cat="all">🍹 <span data-i18n="catAll">Sve</span></button>
+      <button class="cat-tab" data-cat="beer">🍺 <span data-i18n="catBeer">Pivo</span></button>
+      <button class="cat-tab" data-cat="wine">🍷 <span data-i18n="catWine">Vino</span></button>
+      <button class="cat-tab" data-cat="spirits">🥃 <span data-i18n="catSpirits">Žestoko</span></button>
+      <button class="cat-tab" data-cat="cocktail">🍸 <span data-i18n="catCocktail">Koktel</span></button>
+    </div>
+
+    <!-- Drink list -->
+    <div class="card">
+      <div id="drink-list"></div>
+    </div>
+
+    <!-- Custom drink -->
+    <div class="mt-md">
+      <button class="btn btn--ghost" id="btn-show-custom">
+        ✏️ <span data-i18n="customDrink">Vlastito piće</span>
+      </button>
+    </div>
+
+    <div class="card mt-sm hidden" id="custom-drink-form" style="padding: var(--space-md);">
+      <div class="form-group">
+        <label class="form-label" data-i18n="drinkName">Naziv pića</label>
+        <input class="form-input" id="custom-name" type="text" placeholder="npr. Domaća rakija" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="drinkABV">Alkohol (%)</label>
+          <input class="form-input" id="custom-abv" type="number" min="0.5" max="100" step="0.1" placeholder="40" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="drinkVolume">Količina (ml)</label>
+          <input class="form-input" id="custom-volume" type="number" min="10" max="2000" step="10" placeholder="300" />
+        </div>
+      </div>
+      <button class="btn btn--primary" id="btn-add-custom" data-i18n="btnAddDrink">Dodaj u sesiju</button>
+    </div>
+
+  </div><!-- /screen-drink -->
+
+
+  <!-- ── SESSION SCREEN ── -->
+  <div class="screen" id="screen-session">
+
+    <div class="section-header mb-md">
+      <span class="section-title" data-i18n="screenSession">Moja sesija</span>
+      <button class="btn btn--danger btn--sm" id="btn-clear-session" data-i18n="btnClearSession">Očisti</button>
+    </div>
+
+    <div class="card">
+      <div id="session-list"></div>
+    </div>
+
+  </div><!-- /screen-session -->
+
+</main>
+
+<!-- ═══════════════════════════════════════════════
+     BOTTOM NAVIGATION
+═══════════════════════════════════════════════ -->
+<nav class="bottom-nav">
+  <button class="nav-item active" data-screen="home">
+    <span class="nav-item__icon">📊</span>
+    <span class="nav-item__label" data-i18n="navHome">Početna</span>
+  </button>
+  <button class="nav-item" data-screen="drink">
+    <span class="nav-item__icon">🍺</span>
+    <span class="nav-item__label" data-i18n="navDrink">Dodaj</span>
+  </button>
+  <button class="nav-item" data-screen="session">
+    <span class="nav-item__icon">📋</span>
+    <span class="nav-item__label" data-i18n="navHistory">Sesija</span>
+  </button>
+  <button class="nav-item" data-screen="profiles">
+    <span class="nav-item__icon">👤</span>
+    <span class="nav-item__label" data-i18n="navProfiles">Profili</span>
+  </button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     DRINK DETAIL MODAL
+═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="text-align:center; margin-bottom: var(--space-md);">
+      <div id="modal-drink-icon" style="font-size: 3rem; margin-bottom: 8px;">🍺</div>
+      <div id="modal-drink-name" style="font-size: 1.2rem; font-weight: 700;"></div>
+      <div id="modal-drink-meta" style="font-size: 0.8rem; color: var(--clr-text-dim); margin-top: 4px;"></div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" data-i18n="drinkVolume">Količina</label>
+      <div class="volume-selector" id="modal-volume-options"></div>
+    </div>
+
+    <div id="modal-grams" style="font-size: 0.82rem; color: var(--clr-text-dim); margin: 8px 0 16px; text-align: center;"></div>
+
+    <button class="btn btn--primary" id="btn-modal-add" data-i18n="btnAddDrink">Dodaj u sesiju</button>
+    <button class="btn btn--ghost mt-sm" id="btn-modal-close" data-i18n="btnClose" style="width:100%;">Zatvori</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     TOAST
+═══════════════════════════════════════════════ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════ -->
+<script type="module" src="js/main.js?v=1.0.0"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/bac-calculator/sw.js')
+        .then(() => console.log('SW registered'))
+        .catch(e => console.warn('SW failed:', e));
+    });
+  }
+</script>
+
+</body>
+</html>

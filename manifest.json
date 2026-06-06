@@ -1,0 +1,27 @@
+{
+  "name": "Promilator",
+  "short_name": "Promilator",
+  "description": "Kalkulator promila alkohola u krvi / Blood Alcohol Calculator",
+  "start_url": "/bac-calculator/",
+  "scope": "/bac-calculator/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f0f13",
+  "theme_color": "#1a1a24",
+  "lang": "hr",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "lifestyle", "utilities"]
+}
