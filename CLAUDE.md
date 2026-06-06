@@ -95,14 +95,26 @@ git push origin main
 
 Bash sandbox ima permission greške na .git/config — potvrđeno!
 
-### 4. Cache busting
+### 4. Cache busting — OBAVEZNO pri svakom commitu
+
+Svaka promjena JS/CSS zahtijeva bump na **3 mjesta**:
 
 ```js
-const CACHE_VERSION = 'bac-v1.0.0'; // bumpa pri svakoj CSS/JS promjeni
+// 1. sw.js
+const CACHE_VERSION = 'bac-v1.2.2';
+
+// 2. index.html
+<script type="module" src="js/main.js?v=1.2.2"></script>
+
+// 3. main.js — svi importi
+import { t } from './i18n.js?v=1.2.2';
+import { ... } from './profiles.js?v=1.2.2';
+import { ... } from './session.js?v=1.2.2';
+import { ... } from './bac.js?v=1.2.2';
+import { ... } from './drinks-db.js?v=1.2.2';
 ```
 
-SW cache: fajlovi navedeni bez `?v=` query stringa.
-ES moduli: `import { fn } from './module.js?v=X.Y'` — bump pri svakoj promjeni.
+Bez ovoga browser servira cached module iz prethodne verzije čak i nakon SW update-a.
 
 ### 5. Redoslijed implementacije (SLIJEDI OVO)
 
@@ -148,50 +160,4 @@ BAC(t) = Σ max(0, (A_i / (r × W)) - β × (t - t_i))
 Profile {
   id: string,        // uuid
   name: string,
-  weight: number,    // kg
-  height: number,    // cm
-  gender: 'male'|'female',
-  birthYear: number,
-  createdAt: number  // timestamp
-}
-
-DrinkEntry {
-  id: string,
-  drinkId: string,   // iz drinks-db ili 'custom'
-  name: string,
-  abv: number,       // 0-1 (npr. 0.05 za 5%)
-  volumeMl: number,
-  timestamp: number  // ms epoch
-}
-```
-
----
-
-## Current State
-
-**Branch:** `main`
-**Zadnji commit:** `v1.2.1 — fix JS syntax error (literal newline u i18n.js)`
-**APP_VERSION:** `v1.2.1`
-
----
-
-## Verzijska historija
-
-| Verzija | Feature |
-|---------|---------|
-| v1.2.1  | Bugfix: literal newline u i18n.js infoLimitsText ubijao cijeli modul |
-| v1.2.0  | Info modal (Widmark objašnjenje), baza proširena na ~45 pića (Osječko, Pelinkovac...) |
-| v1.1.0  | Profile tap=select, time picker pri dodavanju pića, version display |
-| v1.0.0  | Initial release: profili, BAC engine, alkohol DB, PWA |
-
----
-
-## Brzi debugging checklist
-
-1. App se ne učitava → `tail -20 index.html` (truncation?)
-2. CSS nema efekta → bump SW cache version
-3. Git greška → koristiti PowerShell, ne bash sandbox
-4. JS error → dynamic import validacija (NE `node --check`!)
-5. ES modul ne učitava → provjeri `?v=` query string u svim importima
-6. BAC ne pada → provjeri timestamp format (ms, ne sekunde)
-7. Header+nav vidljiv, sadržaj prazan → JS syntax error u modulu (browser odbacuje cijeli modul)
+  weight: number
